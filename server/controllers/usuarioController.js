@@ -9,9 +9,10 @@ exports.loginOcrearUsuario = async (req, res) => {
         if (usuario) {
             return res.json(usuario);
         } else {
+            // Si entra con Google, telefono/direccion vendrán vacíos al principio
             usuario = new Usuario({
-                email: email || '',
-                nombre: nombre || 'Usuario Nuevo',
+                email,
+                nombre: nombre || 'Usuario Google',
                 firebaseUid,
                 telefono: telefono || '',
                 direccion: direccion || '',
@@ -26,13 +27,13 @@ exports.loginOcrearUsuario = async (req, res) => {
     }
 };
 
-// Función para actualizar datos personales (Dirección/Teléfono)
+// Actualizar perfil (Usado por la pantalla de completar datos)
 exports.actualizarPerfil = async (req, res) => {
     try {
-        const { telefono, direccion } = req.body;
+        const { telefono, direccion, nombre } = req.body;
         const usuario = await Usuario.findOneAndUpdate(
             { firebaseUid: req.params.uid },
-            { telefono, direccion },
+            { telefono, direccion, nombre },
             { new: true }
         );
         res.json(usuario);
