@@ -1,5 +1,6 @@
 const Marca = require('../models/Marca');
 const Categoria = require('../models/Categoria');
+const Color = require('../models/Color');
 
 // --- MARCAS ---
 exports.crearMarca = async (req, res) => {
