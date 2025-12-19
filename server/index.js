@@ -12,8 +12,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Importamos las rutas de productos
+// Importamos las rutas
 app.use('/api/productos', require('./routes/productos'));
+app.use('/api/auxiliares', require('./routes/auxiliares'));
 
 app.get('/', (req, res) => {
     res.send('¡Servidor del E-commerce funcionando y conectado!');
