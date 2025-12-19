@@ -25,16 +25,15 @@ exports.obtenerProductos = async (req, res) => {
 //actualizar producto
 exports.actualizarProducto = async (req, res) => {
     try {
-        const { nombre, marca, descripcion, categoria, precio, stock } = req.body;
+        // 1. Extraemos TAMBIÉN la imagen del cuerpo de la petición
+        const { nombre, marca, descripcion, categoria, precio, stock, imagen } = req.body;
         
-        // 1. Revisar si el ID es válido (opcional pero recomendado) y si existe el producto
         let producto = await Producto.findById(req.params.id);
 
         if (!producto) {
             return res.status(404).json({ msg: 'No existe el producto' });
         }
 
-        // 2. Crear el objeto con la nueva información
         const nuevoProducto = {};
         if (nombre) nuevoProducto.nombre = nombre;
         if (marca) nuevoProducto.marca = marca;
@@ -42,9 +41,10 @@ exports.actualizarProducto = async (req, res) => {
         if (categoria) nuevoProducto.categoria = categoria;
         if (precio) nuevoProducto.precio = precio;
         if (stock) nuevoProducto.stock = stock;
+        
+        // ---> AGREGAR ESTO: Si viene una imagen, la actualizamos
+        if (imagen) nuevoProducto.imagen = imagen;
 
-        // 3. Actualizar en la BD
-        // { new: true } nos devuelve el producto YA actualizado en la respuesta
         producto = await Producto.findByIdAndUpdate(
             { _id: req.params.id }, 
             nuevoProducto, 
