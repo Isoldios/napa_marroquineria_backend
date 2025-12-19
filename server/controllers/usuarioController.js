@@ -1,22 +1,21 @@
 const Usuario = require('../models/Usuario');
 
 exports.loginOcrearUsuario = async (req, res) => {
-    const { email, nombre, firebaseUid } = req.body;
+    const { email, nombre, firebaseUid, telefono, direccion, rol } = req.body;
 
     try {
-        // 1. Buscamos si el usuario ya existe en Mongo
-        let usuario = await Usuario.findOne({ email });
+        let usuario = await Usuario.findOne({ firebaseUid });
 
         if (usuario) {
-            // Si existe, devolvemos sus datos (incluyendo el ROL)
             return res.json(usuario);
         } else {
-            // 2. Si no existe (es la primera vez que entra), lo creamos
             usuario = new Usuario({
-                email,
-                nombre,
+                email: email || '',
+                nombre: nombre || 'Usuario Nuevo',
                 firebaseUid,
-                rol: 'cliente' // Por defecto
+                telefono: telefono || '',
+                direccion: direccion || '',
+                rol: rol || 'cliente'
             });
             await usuario.save();
             return res.json(usuario);
