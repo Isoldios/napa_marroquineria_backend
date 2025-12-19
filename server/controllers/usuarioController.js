@@ -30,14 +30,29 @@ exports.loginOcrearUsuario = async (req, res) => {
 // Actualizar perfil (Usado por la pantalla de completar datos)
 exports.actualizarPerfil = async (req, res) => {
     try {
+        console.log("--> INTENTO DE ACTUALIZAR PERFIL");
+        console.log("UID Recibido:", req.params.uid);
+        console.log("Datos nuevos:", req.body);
+
         const { telefono, direccion, nombre } = req.body;
+        
+        // Buscamos por firebaseUid (que es el ID largo de Google/Firebase)
         const usuario = await Usuario.findOneAndUpdate(
-            { firebaseUid: req.params.uid },
+            { firebaseUid: req.params.uid }, 
             { telefono, direccion, nombre },
-            { new: true }
+            { new: true } // Esto es vital para que devuelva el dato nuevo y no el viejo
         );
+
+        if (!usuario) {
+            console.log("--> ERROR: Usuario no encontrado en BD con ese UID");
+            return res.status(404).json({ msg: 'Usuario no encontrado' });
+        }
+        
+        console.log("--> ACTUALIZACIÓN EXITOSA:", usuario);
         res.json(usuario);
+
     } catch (error) {
+        console.log("--> ERROR SERVIDOR:", error);
         res.status(500).send('Error al actualizar');
     }
 };
