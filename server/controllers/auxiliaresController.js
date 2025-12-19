@@ -40,3 +40,22 @@ exports.obtenerCategorias = async (req, res) => {
         res.status(500).send('Error al obtener categorias');
     }
 }
+
+exports.crearColor = async (req, res) => {
+    try {
+        const nuevoColor = new Color(req.body);
+        await nuevoColor.save();
+        res.json(nuevoColor);
+    } catch (error) {
+        res.status(500).send('Error al crear color');
+    }
+}
+
+exports.obtenerColores = async (req, res) => {
+    try {
+        const colores = await Color.find();
+        res.json(colores);
+    } catch (error) {
+        res.status(500).send('Error al obtener colores');
+    }
+}

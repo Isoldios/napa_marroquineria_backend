@@ -10,4 +10,8 @@ router.get('/marcas', auxiliaresController.obtenerMarcas);
 router.post('/categorias', auxiliaresController.crearCategoria);
 router.get('/categorias', auxiliaresController.obtenerCategorias);
 
+// Rutas para Colores
+router.post('/colores', auxiliaresController.crearColor);
+router.get('/colores', auxiliaresController.obtenerColores);
+
 module.exports = router;
