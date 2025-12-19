@@ -7,9 +7,34 @@ exports.loginOcrearUsuario = async (req, res) => {
         let usuario = await Usuario.findOne({ firebaseUid });
 
         if (usuario) {
+            
+            let actualizado = false;
+
+            // Si el usuario en BD no tiene teléfono y ahora me llega uno: actualizo
+            if ((!usuario.telefono || usuario.telefono === "") && telefono) {
+                usuario.telefono = telefono;
+                actualizado = true;
+            }
+
+            // Si el usuario en BD no tiene dirección y ahora me llega una: actualizo
+            if ((!usuario.direccion || usuario.direccion === "") && direccion) {
+                usuario.direccion = direccion;
+                actualizado = true;
+            }
+
+            // Si el nombre es el genérico y ahora me llega uno real: actualizo
+            if ((usuario.nombre === 'Usuario Google' || !usuario.nombre) && nombre) {
+                usuario.nombre = nombre;
+                actualizado = true;
+            }
+
+            if (actualizado) {
+                await usuario.save();
+            }
+
             return res.json(usuario);
         } else {
-            // Si entra con Google, telefono/direccion vendrán vacíos al principio
+            // Si NO existe, creamos con todos los datos que lleguen
             usuario = new Usuario({
                 email,
                 nombre: nombre || 'Usuario Google',
