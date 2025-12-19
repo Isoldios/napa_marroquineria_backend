@@ -15,6 +15,7 @@ app.use(express.json());
 // Importamos las rutas
 app.use('/api/productos', require('./routes/productos'));
 app.use('/api/auxiliares', require('./routes/auxiliares'));
+app.use('/api/usuarios', require('./routes/usuarios'));
 
 app.get('/', (req, res) => {
     res.send('¡Servidor del E-commerce funcionando y conectado!');
