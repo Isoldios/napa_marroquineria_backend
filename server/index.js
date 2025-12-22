@@ -16,6 +16,7 @@ app.use(express.json());
 app.use('/api/productos', require('./routes/productos'));
 app.use('/api/auxiliares', require('./routes/auxiliares'));
 app.use('/api/usuarios', require('./routes/usuarios'));
+app.use('/api/ordenes', require('./routes/ordenes'));
 
 app.get('/', (req, res) => {
     res.send('¡Servidor del E-commerce funcionando y conectado!');
