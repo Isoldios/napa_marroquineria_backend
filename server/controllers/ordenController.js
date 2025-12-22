@@ -30,12 +30,14 @@ exports.obtenerOrdenesUsuario = async (req, res) => {
 exports.obtenerTodas = async (req, res) => {
     try {
         const ordenes = await Orden.find()
-            .populate('usuario', 'nombre email','productos.productoId') // Traemos datos del usuario real
+            .populate('usuario', 'nombre email') 
+            .populate('productos.productoId') 
             .sort({ fecha: -1 });
+            
         res.json(ordenes);
     } catch (error) {
-        console.log(error);
-        res.status(500).send('Hubo un error');
+        console.log("Error en obtenerTodas:", error);
+        res.status(500).send('Hubo un error obteniendo las órdenes');
     }
 };
 
