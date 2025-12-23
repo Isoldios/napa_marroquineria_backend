@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const ordenController = require('../controllers/ordenController');
+const { verificarToken, esAdmin } = require('../middleware/auth');
 
-// Ruta para crear orden
-router.post('/', ordenController.crearOrden);
+// Crear orden: Solo usuarios logueados
+router.post('/', verificarToken, ordenController.crearOrden);
 
-// Ruta para que el usuario vea SUS compras
-router.get('/usuario/:userId', ordenController.obtenerOrdenesUsuario);
+// Ver mis compras: Solo el dueño de la cuenta (Validamos el token)
+router.get('/usuario/:userId', verificarToken, ordenController.obtenerOrdenesUsuario);
 
-// Rutas ADMIN
-router.get('/admin', ordenController.obtenerTodas);
-router.put('/:id', ordenController.actualizarEstado);
+// Admin: Ver todas y cambiar estado
+router.get('/admin', verificarToken, esAdmin, ordenController.obtenerTodas);
+router.put('/:id', verificarToken, esAdmin, ordenController.actualizarEstado);
 
 module.exports = router;
